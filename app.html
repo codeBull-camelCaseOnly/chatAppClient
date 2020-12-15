@@ -13,16 +13,26 @@
 
 <body>
     <div id="app">
-        <ul>
-            <li v-for="message in messages">
-                <p>{{message.content}}</p>
-                <small>{{message.author}}</small>
-            </li>
-        </ul>
+        <div>
+            <ul>
+                <li v-for="message in messages">
+                    <p>{{message.content}}</p>
+                    <small>{{message.author}}</small>
+                </li>
+            </ul>
+        </div>
 
-        <label for="messageHelp">Type your message here</label>
-        <input type="text" name="message" v-model="curr_message" id="messageHelp">
-        <button @click="sendMessage">Submit</button>
+        <div>
+            <label for="messageHelp">Type your message here</label>
+            <input type="text" name="message" v-model="curr_message" id="messageHelp">
+            <button @click="sendMessage">Submit</button>
+        </div>
+
+        <div>
+            <label for="changename">Change username</label>
+            <input @blur="changeName" type="text" name="changename" id="changename" v-model="author">
+            <small style="color: red;" v-show="name_error">This name was already taken...</small>
+        </div>
     </div>
 
     <!-- Import App -->
