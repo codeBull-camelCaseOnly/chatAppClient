@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chatAppClient</title>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@next"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="message in messages">
+                <p>{{message.content}}</p>
+                <small>{{message.author}}</small>
+            </li>
+        </ul>
+
+        <label for="messageHelp">Type your message here</label>
+        <input type="text" name="message" v-model="curr_message" id="messageHelp">
+        <button @click="sendMessage">Submit</button>
+    </div>
+
+    <!-- Import App -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+    <script src="./app.js"></script>
+</body>
+
+</html>
