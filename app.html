@@ -29,59 +29,99 @@
 </head>
 
 <body class="bg-dark">
-    <div id="app" class="container w-lg-50 border rounded p-3 mt-5">
-        <div class="card bg-dark text-light" id="card">
-            <div class="card-header text-center display-4">Chat</div>
-            <div class="card-body border rounded" style="height: 300px; overflow-y: scroll; resize: vertical;"
-                id="messages">
+    <div id="app" class="container p-3 mt-5">
 
-                <div class="mt-3" v-for="message in messages">
-                    <div class="text-light p-2 rounded rounded-lg"
-                        :style="{'background-color':message.color, 'font-size': '12px', 'white-space': 'pre', 'width': 'fit-content'}">
-                        {{message.content}}
-                        <div class="text-dark">
-                            <small v-if="message.author === this.author">Me
-                                <span class="material-icons" style="font-size:smaller; color: gold;">
-                                    grade
-                                </span>
-                            </small>
-                            <small v-else>{{message.author}}</small>
+        <div class="row">
+            <!-- Global chat -->
+            <div class="col-6">
+                <div class="card border rounded bg-dark text-light" id="card">
+                    <div class="card-header text-center display-4 text-light">Global Chat</div>
+                    <div class="card-body border rounded" style="height: 300px; overflow-y: scroll; resize: vertical;"
+                        id="messages">
+
+                        <div class="mt-3" v-for="message in messages">
+                            <div class="text-light p-2 rounded rounded-lg"
+                                :style="{'background-color':message.color, 'font-size': '12px', 'white-space': 'pre', 'width': 'fit-content'}">
+                                {{message.content}}
+                                <div class="text-dark">
+                                    <small v-if="message.author === this.author">Me
+                                        <span class="material-icons" style="font-size:smaller; color: gold;">
+                                            grade
+                                        </span>
+                                    </small>
+                                    <small v-else>{{message.author}}</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="input-group mb-3">
+                        <textarea class="form-control" name="message" v-model="curr_message"
+                            placeholder="Type your message here" style="resize: none;" rows="1" id="submit"></textarea>
+                        <div class="input-group-append">
+                            <button @click="sendMessage" class="btn btn-success" id="submit_button">Submit</button>
                         </div>
                     </div>
 
                 </div>
 
+                <div class="form-group mt-3">
+                    <label for="name" :class="(dark_mode)? 'text-light': 'text-dark'">Change username</label>
+                    <input @blur="changeName" type="text" name="changename" v-model="author" class="form-control"
+                        id="name">
+                    <small class="form-text text-danger" v-show="name_error">Name already taken...</small>
+                </div>
+
+
             </div>
-        </div>
-        <div class="mt-3">
-            <div class="input-group mb-3">
-                <textarea class="form-control" name="message" v-model="curr_message"
-                    placeholder="Type your message here" style="resize: none;" rows="1"></textarea>
-                <div class="input-group-append">
-                    <button @click="sendMessage" class="btn btn-success">Submit</button>
+
+            <!-- Creating private chats -->
+            <div class="col-6">
+                <div class="card border rounded bg-dark text-light">
+                    <div class="card-header display-4 text-center text-light">
+                        More options
+                    </div>
+                    <div class="card-body border rounded text-center">
+
+                        <div class="m-2">
+                            <input class="form-check-input" type="checkbox" v-model="dark_mode" id="defaultCheck1">
+                            <label :class="(dark_mode)? 'text-light': 'text-dark'" for="defaultCheck1">
+                                Dark mode
+                            </label>
+                        </div>
+
+                        <button class="form-control btn-success">Create private room</button>
+
+                        <div>
+                            <div v-for="room in available_rooms">
+                                <button class="form-control btn-primary mt-3">
+                                    {{room.name}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
 
-        <div class="form-group mt-3">
-            <label for="name" :class="(dark_mode)? 'text-light': 'text-dark'">Change username</label>
-            <input @blur="changeName" type="text" name="changename" v-model="author" class="form-control" id="name">
-            <small class="form-text text-danger" v-show="name_error">Name already taken...</small>
-        </div>
-
-        <div class="mt-2">
-            <input class="form-check-input" type="checkbox" v-model="dark_mode" id="defaultCheck1">
-            <label :class="(dark_mode)? 'text-light': 'text-dark'" for="defaultCheck1">
-                Dark mode
-            </label>
-        </div>
     </div>
 
     <!-- Import App -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
     <script src="./app.js"></script>
+    <script>
+        document.getElementById("submit").addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault()
+                document.getElementById("submit_button").click()
+            }
+        }, false);
+    </script>
 </body>
 
 </html>

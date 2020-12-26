@@ -7,18 +7,39 @@ const app = Vue.createApp({
             curr_message: '',
             color: '',
             socket: io('http://localhost:3000'),
-            dark_mode: true
+            dark_mode: true,
+
+            available_rooms: [
+                { name: 'Kartik\'s room' },
+                { name: '12345\'s room' }
+            ]
         }
     },
     watch: {
         dark_mode: function () {
-            document.body.classList.toggle('bg-dark')
-            var tmp = document.getElementById('card').classList
-            tmp.toggle('bg-dark')
-            tmp.toggle('text-light')
+            document.querySelector('body').classList.toggle('bg-dark')
+            if (this.dark_mode) {
+                this.globalReplace('bg-light', 'bg-dark')
+                this.globalReplace('text-dark', 'text-light')
+            }
+
+            else {
+                this.globalReplace('bg-dark', 'bg-light')
+                this.globalReplace('text-light', 'text-dark')
+            }
         }
     },
     methods: {
+
+        globalReplace(class1, class2) {
+
+            eles = document.querySelectorAll('.' + class1)
+            eles.forEach(element => {
+                // console.log(element)
+                element.classList.add(class2)
+                element.classList.toggle(class1)
+            });
+        },
         sendMessage() {
             this.socket.emit('message', { content: this.curr_message, author: this.author, color: this.color })
             this.curr_message = ''
